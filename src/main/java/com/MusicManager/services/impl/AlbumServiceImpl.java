@@ -34,15 +34,15 @@ public class AlbumServiceImpl implements AlbumService {
 
     @Override
     public AlbumDTO findAlbumById(Long id) {
-        log.info("Fetching category with ID: {}", id);
+        log.info("Fetching Album with ID: {}", id);
         Album album = albumRepository.findById(id)
-                .orElseThrow(() -> new AlbumException("Categorie introuvable avec l'ID: " + id));
+                .orElseThrow(() -> new AlbumException("Album introuvable avec l'ID: " + id));
         return albumMapper.albumToAlbumDTO(album);
     }
 
     @Override
     public Page<AlbumDTO> searchAlbumsBytitre(String titre, Pageable pageable) {
-        return null;
+        return albumRepository.findByTitreContainingIgnoreCase(titre,pageable).map(albumMapper::albumToAlbumDTO);
     }
 
     @Override
@@ -69,11 +69,27 @@ public class AlbumServiceImpl implements AlbumService {
 
     @Override
     public AlbumDTO updateAlbum(Long id, AlbumDTO albumDTO) {
-        return null;
+        log.info("Updating Album with ID: {}", id);
+        Album album = albumRepository.findById(id)
+                .orElseThrow(() -> new AlbumException("Album introuvable avec l'ID: " + id));
+
+        if (albumRepository.existsByTitre(albumDTO.getTitre()) && !album.getTitre().equals(albumDTO.getTitre())) {
+            throw new AlbumException("Un Album avec ce nom existe déjà : " + albumDTO.getTitre());
+
+        }
+        album.setTitre(albumDTO.getTitre());
+        album.setAnnee(albumDTO.getAnnee());
+        album.setArtiste(albumDTO.getArtiste());
+
+        album = albumRepository.save(album);
+        return albumMapper.albumToAlbumDTO(album);
     }
 
     @Override
     public void deleteAlbum(Long id) {
-
+        log.info("Deleting Album with ID: {}", id);
+        Album album = albumRepository.findById(id)
+                .orElseThrow(() -> new AlbumException("Album introuvable avec l'ID: " + id));
+        albumRepository.delete(album);
     }
 }
