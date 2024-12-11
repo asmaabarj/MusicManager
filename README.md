@@ -81,7 +81,7 @@ MusicManager est une API REST sécurisée pour la gestion d'un catalogue musical
 
 ```bash
 # Cloner le repository
-git clone https://github.com/votre-username/MusicManager.git
+git clone https://github.com/asmaabarj/MusicManager.git
 
 # Accéder au dossier
 cd MusicManager
