@@ -25,7 +25,12 @@ public class GlobalExceptionHandler {
     }
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGenericException(Exception ex) {
-        return createErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Une erreur s'est produite");
+        ex.printStackTrace();
+        
+        return createErrorResponse(
+            HttpStatus.INTERNAL_SERVER_ERROR, 
+            "Une erreur s'est produite: " + ex.getMessage()
+        );
     }
 
     @ExceptionHandler(UsernameNotFoundException.class)

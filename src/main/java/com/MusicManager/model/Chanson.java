@@ -17,7 +17,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class Chanson {
     @Id
-    private Long id;
+    private String id;
     
     @NotBlank(message = "Le titre est obligatoire")
     private String titre;

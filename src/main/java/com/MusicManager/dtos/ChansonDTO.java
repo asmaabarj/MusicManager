@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class ChansonDTO {
-    private Long id;
+    private String id;
     private String titre;
     private Integer duree;
     private Integer trackNumber;
