@@ -1,4 +1,64 @@
 package com.MusicManager.services.impl;
 
-public class ChansonServiceImpl {
+import com.MusicManager.dtos.ChansonDTO;
+import com.MusicManager.exceptions.ChansonException;
+import com.MusicManager.mappers.ChansonMapper;
+import com.MusicManager.model.Chanson;
+import com.MusicManager.repositories.ChansonRepository;
+import com.MusicManager.services.interfaces.ChansonService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
+@Service
+@RequiredArgsConstructor
+public class ChansonServiceImpl implements ChansonService {
+
+    private final ChansonRepository chansonRepository;
+    private final ChansonMapper chansonMapper;
+
+    @Override
+    public Page<ChansonDTO> listChansons(Pageable pageable) {
+        return chansonRepository.findAll(pageable)
+                .map(chansonMapper::chansonToChansonDTO);
+    }
+
+    @Override
+    public Page<ChansonDTO> searchChansonsByTitre(String titre, Pageable pageable) {
+        return chansonRepository.findByTitreContainingIgnoreCase(titre, pageable)
+                .map(chansonMapper::chansonToChansonDTO);
+    }
+
+    @Override
+    public Page<ChansonDTO> findChansonsByAlbum(String albumId, Pageable pageable) {
+        return chansonRepository.findByAlbumId(albumId, pageable)
+                .map(chansonMapper::chansonToChansonDTO);
+    }
+
+    @Override
+    public ChansonDTO addChanson(ChansonDTO chansonDTO) {
+        Chanson chanson = chansonMapper.chansonDTOToChanson(chansonDTO);
+        Chanson savedChanson = chansonRepository.save(chanson);
+        return chansonMapper.chansonToChansonDTO(savedChanson);
+    }
+
+    @Override
+    public ChansonDTO updateChanson(String id, ChansonDTO chansonDTO) {
+        if (!chansonRepository.existsById(id)) {
+            throw new ChansonException("Chanson non trouvée avec l'ID: " + id);
+        }
+        Chanson chanson = chansonMapper.chansonDTOToChanson(chansonDTO);
+        chanson.setId(id);
+        Chanson updatedChanson = chansonRepository.save(chanson);
+        return chansonMapper.chansonToChansonDTO(updatedChanson);
+    }
+
+    @Override
+    public void deleteChanson(String id) {
+        if (!chansonRepository.existsById(id)) {
+            throw new ChansonException("Chanson non trouvée avec l'ID: " + id);
+        }
+        chansonRepository.deleteById(id);
+    }
 }
