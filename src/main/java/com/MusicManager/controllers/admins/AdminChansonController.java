@@ -1,5 +1,6 @@
 package com.MusicManager.controllers.admins;
 
+import com.MusicManager.dtos.AlbumDTO;
 import com.MusicManager.dtos.ChansonDTO;
 import com.MusicManager.services.interfaces.ChansonService;
 import lombok.RequiredArgsConstructor;
@@ -57,4 +58,10 @@ public class AdminChansonController {
         chansonService.deleteChanson(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ChansonDTO> recupererParId(@PathVariable String id) {
+        return ResponseEntity.ok(chansonService.finChansonById(id));
+    }
+
 }

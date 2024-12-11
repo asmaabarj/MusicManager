@@ -7,10 +7,12 @@ import com.MusicManager.model.Chanson;
 import com.MusicManager.repositories.ChansonRepository;
 import com.MusicManager.services.interfaces.ChansonService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ChansonServiceImpl implements ChansonService {
@@ -23,6 +25,14 @@ public class ChansonServiceImpl implements ChansonService {
         return chansonRepository.findAll(pageable)
                 .map(chansonMapper::chansonToChansonDTO);
     }
+
+    @Override
+    public  ChansonDTO finChansonById(String id){
+        log.info("Fetching Album with ID: {}", id);
+        Chanson chanson = chansonRepository.findById(id)
+                .orElseThrow(() -> new ChansonException("chanson introuvable avec l'ID: " + id));
+        return chansonMapper.chansonToChansonDTO(chanson);    }
+
 
     @Override
     public Page<ChansonDTO> searchChansonsByTitre(String titre, Pageable pageable) {

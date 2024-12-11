@@ -37,4 +37,9 @@ public class UserChansonController {
             @PageableDefault(size = 10, sort = "trackNumber", direction = Sort.Direction.ASC) Pageable pageable) {
         return ResponseEntity.ok(chansonService.findChansonsByAlbum(albumId, pageable));
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ChansonDTO> recupererParId(@PathVariable String id) {
+        return ResponseEntity.ok(chansonService.finChansonById(id));
+    }
 }
