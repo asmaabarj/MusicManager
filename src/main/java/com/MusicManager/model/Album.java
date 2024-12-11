@@ -17,7 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 public class Album {
     @Id
-    private Long id;
+    private String id;
     
     @NotBlank(message = "Le titre est obligatoire")
     private String titre;

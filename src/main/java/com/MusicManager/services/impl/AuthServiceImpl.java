@@ -31,28 +31,18 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public AuthResponse register(RegisterRequest request) {
-        try {
-            if (userRepository.findByLogin(request.getLogin()).isPresent()) {
-                throw new RuntimeException("Cet utilisateur existe déjà");
-            }
+        Role role = roleRepository.findByName(request.getRoleName())
+            .orElseThrow(() -> new RuntimeException("Rôle non trouvé"));
 
-            Role userRole = roleRepository.findByName(request.getRoleName())
-            .orElseThrow(() -> new RuntimeException("Rôle non trouvé: " + request.getRoleName()));
+        User user = new User();
+        user.setLogin(request.getLogin());
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setRoles(Collections.singletonList(role));
+        
+        userRepository.save(user);
 
-            User user = new User();
-            user.setLogin(request.getLogin());
-            user.setPassword(passwordEncoder.encode(request.getPassword()));
-            user.setRoles(Collections.singletonList(userRole));
-            user.setActive(true);
-
-            user = userRepository.save(user);
-
-            String jwtToken = jwtService.generateToken(user);
-            return new AuthResponse(jwtToken);
-
-        } catch (Exception e) {
-            throw new RuntimeException("Erreur lors de l'enregistrement: " + e.getMessage());
-        }
+        String token = jwtService.generateToken(user);
+        return new AuthResponse(token);
     }
 
     @Override
@@ -68,4 +58,5 @@ public class AuthServiceImpl implements AuthService {
         String jwtToken = jwtService.generateToken(user);
         return new AuthResponse(jwtToken);
     }
+
 }

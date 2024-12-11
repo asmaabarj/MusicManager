@@ -14,6 +14,6 @@ public class ChansonDTO {
     private String titre;
     private Integer duree;
     private Integer trackNumber;
-    private Long albumId;
+    private String albumId;
 
 }

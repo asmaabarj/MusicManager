@@ -12,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class AlbumDTO {
-    private Long id;
+    private String id;
     private String titre;
     private String artiste;
     private Integer annee;
