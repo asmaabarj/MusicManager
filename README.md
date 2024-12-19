@@ -103,13 +103,6 @@ docker build -t music-manager .
 docker run -p 8080:8080 music-manager
 ```
 
-## 📚 Documentation API
-
-La documentation Swagger est disponible à l'URL suivante après le démarrage de l'application :
-```
-http://localhost:8080/swagger-ui.html
-```
-
 ## 🧪 Tests
 
 ```bash
@@ -131,3 +124,5 @@ Pour lancer avec un profil spécifique :
 mvn spring-boot:run -Dspring-boot.run.profiles=dev
 ```
 
+## 📅 Planification sur Jira avec gitFlow
+https://asmaabarj5.atlassian.net/jira/software/projects/MUS/boards/364/backlog
