@@ -12,25 +12,27 @@ pipeline {
     stages {
         stage('Clone Repo') {
             steps {
-                git branch: 'main', url: 'https://github.com/asmaabarj/MusicManager
+                cleanWs()
+                git branch: 'main', url: 'https://github.com/asmaabarj/MusicManager'
             }
         }
 
         stage('Build Artifact') {
             steps {
-                dir('musique') {
-                    bat 'mvn clean package -DskipTests'
-                }
+                bat 'echo %CD%'
+                bat 'dir'
+                bat '''
+                    mvn clean package -DskipTests
+                '''
             }
         }
 
         stage('Prepare Docker Build') {
             steps {
                 script {
-                    // Créer le Dockerfile s'il n'existe pas
                     writeFile file: 'Dockerfile', text: '''FROM openjdk:8-jdk-alpine
 WORKDIR /app
-COPY musique/target/*.jar app.jar
+COPY target/*.jar app.jar
 EXPOSE 8086
 ENTRYPOINT ["java", "-jar", "app.jar"]'''
                 }
@@ -45,11 +47,9 @@ ENTRYPOINT ["java", "-jar", "app.jar"]'''
 
         stage('Docker Push') {
             steps {
-                script {
-                    withCredentials([usernamePassword(credentialsId: 'docker-token', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
-                        bat 'echo %DOCKER_PASSWORD%| docker login -u %DOCKER_USERNAME% --password-stdin'
-                        bat "docker push ${DOCKER_HUB_REPO}:latest"
-                    }
+                withCredentials([usernamePassword(credentialsId: 'docker-token', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
+                    bat "docker login -u %DOCKER_USERNAME% -p %DOCKER_PASSWORD%"
+                    bat "docker push ${DOCKER_HUB_REPO}:latest"
                 }
             }
         }
