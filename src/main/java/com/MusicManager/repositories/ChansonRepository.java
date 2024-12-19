@@ -11,4 +11,5 @@ import com.MusicManager.model.Chanson;
 public interface ChansonRepository extends MongoRepository<Chanson, String> {
     Page<Chanson> findByTitreContainingIgnoreCase(String titre, Pageable pageable);
     Page<Chanson> findByAlbumId(String albumId, Pageable pageable);
+    boolean existsByTitre(String titre);
 }

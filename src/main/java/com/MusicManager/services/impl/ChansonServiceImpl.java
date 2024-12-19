@@ -2,6 +2,7 @@ package com.MusicManager.services.impl;
 
 import com.MusicManager.dtos.ChansonDTO;
 import com.MusicManager.exceptions.ChansonException;
+import com.MusicManager.exceptions.ChansonException;
 import com.MusicManager.mappers.ChansonMapper;
 import com.MusicManager.model.Chanson;
 import com.MusicManager.repositories.ChansonRepository;
@@ -48,9 +49,11 @@ public class ChansonServiceImpl implements ChansonService {
 
     @Override
     public ChansonDTO addChanson(ChansonDTO chansonDTO) {
+        if (chansonRepository.existsByTitre(chansonDTO.getTitre())) {
+            throw new ChansonException("Une chanson avec le titre '" + chansonDTO.getTitre() + "' existe déjà");
+        }
         Chanson chanson = chansonMapper.chansonDTOToChanson(chansonDTO);
-        Chanson savedChanson = chansonRepository.save(chanson);
-        return chansonMapper.chansonToChansonDTO(savedChanson);
+        return chansonMapper.chansonToChansonDTO(chansonRepository.save(chanson));
     }
 
     @Override

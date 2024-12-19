@@ -69,3 +69,7 @@ i
 9src/main/java/com/MusicManager/config/SecurityConfig.java,8\f\8f921660cfce69d05424af2409a0c78faa207ed0
 t
 Dsrc/main/java/com/MusicManager/services/interfaces/AlbumService.java,b\d\bd44e99c0a8833a7a9292addff9c95b247d0c33e
+9
+	README.md,8\e\8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d
+s
+Csrc/main/java/com/MusicManager/services/interfaces/UserService.java,8\3\834eecb6d66b53316965c88ce2162e9010cc12fc
